@@ -91,3 +91,10 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'accounts.User'
 LOGIN_URL = '/login/'
+CSRF_TRUSTED_ORIGINS = [
+    "https://finditai-production.up.railway.app",
+]
+SECURE_PROXY_SSL_HEADER = (
+    'HTTP_X_FORWARDED_PROTO',
+    'https'
+)
