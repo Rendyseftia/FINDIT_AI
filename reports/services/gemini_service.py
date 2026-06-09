@@ -1,12 +1,13 @@
 import requests
 import base64
 import json
+import os
 
 
 # =========================
 # GEMINI API KEY
 # =========================
-API_KEY = "AIzaSyB8Qe0mbxscRgZjSLIZyuORzrxWsZhtrTc"
+API_KEY = os.getenv("GEMINI_API_KEY")
 
 
 # =========================
