@@ -1,0 +1,151 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Smart Match
+{% endblock %}
+
+{% block content %}
+
+<section class="py-5">
+
+    <div class="container">
+
+        <!-- TITLE -->
+        <div class="text-center mb-5">
+
+            <h1 class="hero-title">
+
+                Smart Match Found
+
+            </h1>
+
+            <p class="hero-subtitle">
+
+                Kami menemukan kemungkinan barang cocok.
+
+            </p>
+
+        </div>
+
+        <div class="row">
+
+            <!-- USER REPORT -->
+            <div class="col-lg-5 mb-4">
+
+                <div class="card-dark p-4 h-100">
+
+                    <h3 class="mb-4">
+
+                        Laporan Anda
+
+                    </h3>
+
+                    <p>
+
+                        <strong>
+                            {{ form_data.nama_barang }}
+                        </strong>
+
+                    </p>
+
+                    <p class="text-secondary-custom">
+
+                        {{ form_data.kategori }}
+
+                    </p>
+
+                    <p class="text-secondary-custom">
+
+                        {{ form_data.deskripsi }}
+
+                    </p>
+
+                </div>
+
+            </div>
+
+            <!-- MATCH RESULT -->
+            <div class="col-lg-7 mb-4">
+
+                <div class="card-dark p-4 h-100">
+
+                    <!-- MATCH BAR -->
+                    <div class="match-bar mb-4">
+
+                        {{ similarity }}% MATCH
+
+                    </div>
+
+                    <h2>
+
+                        {{ best_match.nama_barang }}
+
+                    </h2>
+
+                    <p class="text-secondary-custom">
+
+                        {{ best_match.kategori }}
+
+                    </p>
+
+                    <a
+                    href="/laporan/{{ best_match.id }}/"
+                    class="btn btn-danger-custom w-100 mb-3">
+
+                        Lihat Detail
+
+                    </a>
+
+                    <!-- FORCE SAVE -->
+                    <form method="POST"
+                    enctype="multipart/form-data">
+
+                        {% csrf_token %}
+
+                        {% for key, value in form_data.items %}
+
+                        <input
+                        type="hidden"
+                        name="{{ key }}"
+                        value="{{ value }}">
+
+                        {% endfor %}
+
+                        <input
+                        type="hidden"
+                        name="force_save"
+                        value="1">
+
+                        <button
+                        type="submit"
+                        class="btn btn-success w-100">
+
+                            Tetap Simpan Laporan
+
+                        </button>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<style>
+
+.match-bar{
+    background:#198754;
+    padding:10px;
+    border-radius:12px;
+    text-align:center;
+    font-weight:bold;
+}
+
+</style>
+
+{% endblock %}

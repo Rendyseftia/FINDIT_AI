@@ -1,0 +1,670 @@
+{% extends 'base.html' %}
+
+{% block title %}
+{{ report.nama_barang }}
+{% endblock %}
+
+{% block content %}
+
+<!-- FONT -->
+<link
+href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
+rel="stylesheet">
+
+<!-- ICON -->
+<link
+rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+/>
+
+<section class="detail-section">
+
+    <div class="container">
+
+        <!-- BACK -->
+        <div class="mb-4">
+
+            <a
+            href="/"
+            class="back-btn">
+
+                <i class="fas fa-arrow-left"></i>
+
+                Kembali
+
+            </a>
+
+        </div>
+
+        <div class="row g-4">
+
+            <!-- IMAGE -->
+            <div class="col-lg-7">
+
+                <div class="detail-image-card">
+
+                    <img
+                    src="{{ report.foto_barang.url }}"
+                    class="detail-image">
+
+                </div>
+
+            </div>
+
+            <!-- DETAIL -->
+            <div class="col-lg-5">
+
+                <div class="detail-card">
+
+                    <!-- STATUS -->
+                    {% if report.status == 'hilang' %}
+
+                        <div class="status-badge danger-badge">
+
+                            Barang Hilang
+
+                        </div>
+
+                    {% else %}
+
+                        <div class="status-badge success-badge">
+
+                            Barang Ditemukan
+
+                        </div>
+
+                    {% endif %}
+
+                    <!-- TITLE -->
+                    <h1 class="detail-title">
+
+                        {{ report.nama_barang }}
+
+                    </h1>
+
+                    <div class="detail-category">
+
+                        {{ report.kategori }}
+
+                    </div>
+
+                    <div class="detail-divider"></div>
+
+                    <!-- LOCATION -->
+                    <div class="info-item">
+
+                        <div class="info-icon location-icon">
+
+                            <i class="fas fa-map-marker-alt"></i>
+
+                        </div>
+
+                        <span>
+                            {{ report.lokasi }}
+                        </span>
+
+                    </div>
+
+                    <!-- DATE -->
+                    <div class="info-item">
+
+                        <div class="info-icon calendar-icon">
+
+                            <i class="fas fa-calendar-alt"></i>
+
+                        </div>
+
+                        <span>
+                            {{ report.tanggal_kejadian }}
+                        </span>
+
+                    </div>
+
+                    <!-- DESKRIPSI -->
+                    <div class="content-section">
+
+                        <h5 class="content-title">
+
+                            Deskripsi
+
+                        </h5>
+
+                        <p class="content-text">
+
+                            {{ report.deskripsi }}
+
+                        </p>
+
+                    </div>
+
+                    <!-- CIRI -->
+                    <div class="content-section">
+
+                        <h5 class="content-title">
+
+                            Ciri Khas
+
+                        </h5>
+
+                        <p class="content-text">
+
+                            {{ report.ciri_khas }}
+
+                        </p>
+
+                    </div>
+
+                    <!-- SECURITY -->
+                    <div class="security-box">
+
+                        <small class="security-label">
+
+                            Hubungi Security Kampus
+
+                        </small>
+
+                        {% if active_shift %}
+
+                            <h4 class="security-name">
+
+                                {{ active_shift.nama_security }}
+
+                            </h4>
+
+                            <p class="security-shift">
+
+                                Shift {{ active_shift.nama_shift|title }}
+
+                            </p>
+
+                            <p class="security-time">
+
+                                {{ active_shift.jam_mulai }}
+                                -
+                                {{ active_shift.jam_selesai }}
+
+                            </p>
+
+                            <p class="security-phone">
+
+                                {{ active_shift.nomor_whatsapp }}
+
+                            </p>
+
+                        {% else %}
+
+                            <h5 class="mt-3">
+
+                                Security Tidak Aktif
+
+                            </h5>
+
+                        {% endif %}
+
+                    </div>
+
+                    <!-- BUTTON -->
+                    <a
+                    href="{{ whatsapp_url }}"
+                    target="_blank"
+                    class="whatsapp-btn">
+
+                        <i class="fab fa-whatsapp"></i>
+
+                        Hubungi via WhatsApp
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- SMART MATCH -->
+        <div class="smart-box">
+
+            <h2 class="smart-title">
+
+                Smart Match Recommendation
+
+            </h2>
+
+            <div class="row g-4">
+
+                {% for item in smart_matches %}
+
+                <div class="col-lg-4">
+
+                    <div class="smart-card">
+
+                        <img
+                        src="{{ item.foto_barang.url }}"
+                        class="smart-image">
+
+                        <div class="smart-body">
+
+                            <h4 class="smart-item-title">
+
+                                {{ item.nama_barang }}
+
+                            </h4>
+
+                            <p class="smart-location">
+
+                                <i class="fas fa-map-marker-alt"></i>
+
+                                {{ item.lokasi }}
+
+                            </p>
+
+                            <a
+                            href="/laporan/{{ item.id }}/"
+                            class="smart-btn">
+
+                                Lihat Detail
+
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                {% empty %}
+
+                <div class="col-12">
+
+                    <div class="empty-box">
+
+                        Belum ada rekomendasi smart matching.
+
+                    </div>
+
+                </div>
+
+                {% endfor %}
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<style>
+
+:root{
+    --bg:#0a0a0a;
+    --card:#121212;
+    --border:#262626;
+    --red:#e53245;
+    --green:#1f8f50;
+}
+
+body{
+    background:var(--bg);
+    font-family:'Plus Jakarta Sans',sans-serif;
+}
+
+/* SECTION */
+
+.detail-section{
+    padding-top:70px;
+    padding-bottom:90px;
+}
+
+/* BACK */
+
+.back-btn{
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+
+    padding:14px 20px;
+
+    background:#141414;
+
+    border:1px solid #262626;
+
+    border-radius:16px;
+
+    color:white;
+
+    text-decoration:none;
+
+    font-weight:600;
+
+    transition:0.3s;
+}
+
+.back-btn:hover{
+    background:#1d1d1d;
+    color:white;
+}
+
+/* IMAGE */
+
+.detail-image-card{
+    background:#121212;
+    border:1px solid #262626;
+    border-radius:30px;
+    padding:18px;
+}
+
+.detail-image{
+    width:100%;
+    border-radius:22px;
+    object-fit:cover;
+}
+
+/* DETAIL CARD */
+
+.detail-card{
+    background:#121212;
+    border:1px solid #262626;
+    border-radius:30px;
+    padding:30px;
+    height:100%;
+}
+
+/* BADGE */
+
+.status-badge{
+    display:inline-block;
+
+    padding:8px 14px;
+
+    border-radius:10px;
+
+    font-size:12px;
+    font-weight:700;
+
+    margin-bottom:25px;
+}
+
+.danger-badge{
+    background:var(--red);
+    color:white;
+}
+
+.success-badge{
+    background:var(--green);
+    color:white;
+}
+
+/* TITLE */
+
+.detail-title{
+    font-size:62px;
+    line-height:1.05;
+    font-weight:800;
+    letter-spacing:-2px;
+    margin-bottom:20px;
+}
+
+.detail-category{
+    color:var(--red);
+    font-size:18px;
+    margin-bottom:25px;
+}
+
+.detail-divider{
+    width:100%;
+    height:1px;
+    background:#262626;
+    margin-bottom:25px;
+}
+
+/* INFO */
+
+.info-item{
+    display:flex;
+    align-items:center;
+    gap:14px;
+
+    margin-bottom:22px;
+
+    color:white;
+
+    font-size:18px;
+}
+
+.info-icon{
+    width:22px;
+    height:22px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    font-size:16px;
+}
+
+/* ICON COLOR */
+
+.location-icon{
+    color:#f6c453;
+}
+
+.calendar-icon{
+    color:#b197fc;
+}
+
+/* CONTENT */
+
+.content-section{
+    margin-top:40px;
+}
+
+.content-title{
+    font-size:20px;
+    font-weight:700;
+    margin-bottom:15px;
+}
+
+.content-text{
+    color:#8a8a8a;
+    line-height:1.8;
+    font-size:17px;
+}
+
+/* SECURITY */
+
+.security-box{
+    margin-top:40px;
+
+    background:#101010;
+
+    border:1px solid #262626;
+
+    border-radius:24px;
+
+    padding:28px;
+}
+
+.security-label{
+    color:#777;
+    font-size:14px;
+}
+
+.security-name{
+    font-size:42px;
+    font-weight:800;
+    margin-top:12px;
+    margin-bottom:10px;
+}
+
+.security-shift{
+    color:var(--red);
+    font-size:18px;
+    font-weight:700;
+    margin-bottom:6px;
+}
+
+.security-time{
+    color:#b0b0b0;
+    font-size:18px;
+    margin-bottom:6px;
+}
+
+.security-phone{
+    color:#25D366;
+    font-size:24px;
+    font-weight:700;
+}
+
+/* WA BUTTON */
+
+.whatsapp-btn{
+    width:100%;
+
+    margin-top:28px;
+
+    height:65px;
+
+    border-radius:20px;
+
+    background:#1f8f50;
+
+    color:white;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:12px;
+
+    text-decoration:none;
+
+    font-size:18px;
+    font-weight:700;
+
+    transition:0.3s;
+}
+
+.whatsapp-btn:hover{
+    background:#18703f;
+    color:white;
+    transform:translateY(-2px);
+}
+
+/* SMART */
+
+.smart-box{
+    margin-top:70px;
+
+    background:#121212;
+
+    border:1px solid #262626;
+
+    border-radius:30px;
+
+    padding:40px;
+}
+
+.smart-title{
+    font-size:38px;
+    font-weight:800;
+    margin-bottom:40px;
+}
+
+/* SMART CARD */
+
+.smart-card{
+    background:#161616;
+    border:1px solid #262626;
+    border-radius:24px;
+    overflow:hidden;
+    transition:0.3s;
+    height:100%;
+}
+
+.smart-card:hover{
+    transform:translateY(-6px);
+}
+
+.smart-image{
+    width:100%;
+    height:240px;
+    object-fit:cover;
+}
+
+.smart-body{
+    padding:22px;
+}
+
+.smart-item-title{
+    font-size:26px;
+    font-weight:700;
+    margin-bottom:14px;
+}
+
+.smart-location{
+    color:#8a8a8a;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-bottom:25px;
+}
+
+.smart-btn{
+    width:100%;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    height:52px;
+
+    background:var(--red);
+
+    border-radius:16px;
+
+    color:white;
+
+    text-decoration:none;
+
+    font-weight:700;
+
+    transition:0.3s;
+}
+
+.smart-btn:hover{
+    background:#c62839;
+    color:white;
+}
+
+/* EMPTY */
+
+.empty-box{
+    background:#161616;
+    border:1px solid #262626;
+    padding:60px;
+    border-radius:24px;
+    text-align:center;
+    color:#777;
+}
+
+/* MOBILE */
+
+@media(max-width:768px){
+
+    .detail-title{
+        font-size:42px;
+    }
+
+    .security-name{
+        font-size:30px;
+    }
+
+    .smart-box{
+        padding:24px;
+    }
+
+}
+
+</style>
+
+{% endblock %}

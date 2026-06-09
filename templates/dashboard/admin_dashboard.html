@@ -1,0 +1,1240 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Dashboard Admin
+{% endblock %}
+
+{% block content %}
+
+<section class="py-5 admin-section">
+
+    <div class="container">
+
+        <!-- ===================================== -->
+        <!-- HEADER -->
+        <!-- ===================================== -->
+
+        <div class="dashboard-header">
+
+            <div>
+
+                <div class="mini-badge">
+
+                    FINDIT AI ADMIN
+
+                </div>
+
+                <h1 class="dashboard-title">
+
+                    Dashboard Admin
+
+                </h1>
+
+                <p class="dashboard-subtitle">
+
+                    Panel moderasi laporan barang kampus dan sistem serah terima.
+
+                </p>
+
+            </div>
+
+            <!-- ACTION -->
+            <div class="header-actions">
+
+                <a
+                href="{% url 'security_shift_dashboard' %}"
+                class="security-btn">
+
+                    <i class="bi bi-shield-check"></i>
+
+                    Security Shift
+
+                </a>
+
+            </div>
+
+        </div>
+
+        <!-- ===================================== -->
+        <!-- STATS -->
+        <!-- ===================================== -->
+
+        <div class="row mb-5">
+
+            <!-- PENDING -->
+            <div class="col-lg-4 mb-4">
+
+                <div class="stats-card">
+
+                    <div class="stats-icon warning-icon">
+
+                        <i class="bi bi-hourglass-split"></i>
+
+                    </div>
+
+                    <div>
+
+                        <p class="stats-label">
+
+                            Pending
+
+                        </p>
+
+                        <h1 class="stats-number text-warning">
+
+                            {{ pending_count }}
+
+                        </h1>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- APPROVED -->
+            <div class="col-lg-4 mb-4">
+
+                <div class="stats-card">
+
+                    <div class="stats-icon success-icon">
+
+                        <i class="bi bi-check-circle-fill"></i>
+
+                    </div>
+
+                    <div>
+
+                        <p class="stats-label">
+
+                            Approved
+
+                        </p>
+
+                        <h1 class="stats-number text-success">
+
+                            {{ approved_count }}
+
+                        </h1>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- SELESAI -->
+            <div class="col-lg-4 mb-4">
+
+                <div class="stats-card">
+
+                    <div class="stats-icon done-icon">
+
+                        <i class="bi bi-box-seam-fill"></i>
+
+                    </div>
+
+                    <div>
+
+                        <p class="stats-label">
+
+                            Selesai
+
+                        </p>
+
+                        <h1 class="stats-number done-text">
+
+                            {{ selesai_reports }}
+
+                        </h1>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- ===================================== -->
+        <!-- PENDING REPORT -->
+        <!-- ===================================== -->
+
+        <div class="dashboard-box mb-5">
+
+            <div class="box-header">
+
+                <h3>
+
+                    Laporan Pending
+
+                </h3>
+
+            </div>
+
+            {% for report in pending_reports %}
+
+            <div class="report-admin-card">
+
+                <div class="row align-items-center gy-4">
+
+                    <!-- IMAGE -->
+                    <div class="col-lg-2 text-center">
+
+                        {% if report.foto_barang %}
+
+                        <img
+                        src="{{ report.foto_barang.url }}"
+                        class="report-image">
+
+                        {% else %}
+
+                        <div class="no-image">
+
+                            Tidak Ada Foto
+
+                        </div>
+
+                        {% endif %}
+
+                    </div>
+
+                    <!-- INFO -->
+                    <div class="col-lg-3">
+
+                        <h4 class="fw-bold">
+
+                            {{ report.nama_barang }}
+
+                        </h4>
+
+                        <div class="kategori-text">
+
+                            {{ report.kategori }}
+
+                        </div>
+
+                        <div class="lokasi-text">
+
+                            📍 {{ report.lokasi }}
+
+                        </div>
+
+                    </div>
+
+                    <!-- USER -->
+                    <div class="col-lg-3">
+
+                        <h5 class="fw-bold">
+
+                            {{ report.user.nama_lengkap }}
+
+                        </h5>
+
+                        <div class="text-secondary-custom">
+
+                            {{ report.user.no_whatsapp }}
+
+                        </div>
+
+                    </div>
+
+                    <!-- STATUS -->
+                    <div class="col-lg-2">
+
+                        <span class="badge-status warning-badge">
+
+                            Pending
+
+                        </span>
+
+                    </div>
+
+                    <!-- ACTION -->
+                    <div class="col-lg-2">
+
+                        <a
+                        href="{% url 'approve_report' report.id %}"
+                        class="approve-btn">
+
+                            Setujui
+
+                        </a>
+
+                        <a
+                        href="{% url 'reject_report' report.id %}"
+                        class="reject-btn">
+
+                            Tolak
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            {% empty %}
+
+            <div class="empty-box">
+
+                Tidak ada laporan pending.
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+        <!-- ===================================== -->
+        <!-- APPROVED REPORT -->
+        <!-- ===================================== -->
+
+        <div class="dashboard-box mb-5">
+
+            <div class="box-header">
+
+                <h3>
+
+                    Laporan Approved
+
+                </h3>
+
+            </div>
+
+            {% for report in approved_reports %}
+
+            <div class="report-admin-card">
+
+                <div class="row align-items-center gy-4">
+
+                    <!-- IMAGE -->
+                    <div class="col-lg-2 text-center">
+
+                        {% if report.foto_barang %}
+
+                        <img
+                        src="{{ report.foto_barang.url }}"
+                        class="report-image">
+
+                        {% else %}
+
+                        <div class="no-image">
+
+                            Tidak Ada Foto
+
+                        </div>
+
+                        {% endif %}
+
+                    </div>
+
+                    <!-- INFO -->
+                    <div class="col-lg-3">
+
+                        <h4 class="fw-bold">
+
+                            {{ report.nama_barang }}
+
+                        </h4>
+
+                        <div class="kategori-text">
+
+                            {{ report.kategori }}
+
+                        </div>
+
+                        <div class="lokasi-text">
+
+                            📍 {{ report.lokasi }}
+
+                        </div>
+
+                    </div>
+
+                    <!-- USER -->
+                    <div class="col-lg-2">
+
+                        <h5 class="fw-bold">
+
+                            {{ report.user.nama_lengkap }}
+
+                        </h5>
+
+                    </div>
+
+                    <!-- STATUS -->
+                    <div class="col-lg-2">
+
+                        <span class="badge-status success-badge">
+
+                            Approved
+
+                        </span>
+
+                    </div>
+
+                    <!-- ACTION -->
+                    <div class="col-lg-3">
+
+                        <!-- SERAH TERIMA -->
+                        <button
+                        class="serah-btn"
+                        data-bs-toggle="modal"
+                        data-bs-target="#serahModal{{ report.id }}">
+
+                            Serah Terima
+
+                        </button>
+
+                        <!-- DELETE -->
+                        <a
+                        href="{% url 'delete_report' report.id %}"
+                        class="delete-btn">
+
+                            Hapus
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- ===================================== -->
+            <!-- MODAL SERAH TERIMA -->
+            <!-- ===================================== -->
+
+            <div
+            class="modal fade"
+            id="serahModal{{ report.id }}"
+            tabindex="-1">
+
+                <div class="modal-dialog modal-lg modal-dialog-centered">
+
+                    <div class="modal-content custom-modal">
+
+                        <div class="modal-header border-0">
+
+                            <h4 class="fw-bold">
+
+                                Serah Terima Barang
+
+                            </h4>
+
+                            <button
+                            type="button"
+                            class="btn-close btn-close-white"
+                            data-bs-dismiss="modal"></button>
+
+                        </div>
+
+                        <div class="modal-body">
+
+                            <form
+                            method="POST"
+                            action="{% url 'serah_terima_barang' report.id %}"
+                            enctype="multipart/form-data">
+
+                                {% csrf_token %}
+
+                                <!-- PENEMU -->
+                                <div class="mb-4">
+
+                                    <label class="form-label">
+
+                                        Nama Penemu
+
+                                    </label>
+
+                                    <input
+                                    type="text"
+                                    name="nama_penemu"
+                                    class="form-control custom-input"
+                                    required>
+
+                                </div>
+
+                                <!-- PENERIMA -->
+                                <div class="mb-4">
+
+                                    <label class="form-label">
+
+                                        Nama Penerima
+
+                                    </label>
+
+                                    <input
+                                    type="text"
+                                    name="nama_penerima"
+                                    class="form-control custom-input"
+                                    required>
+
+                                </div>
+
+                                <!-- LOKASI -->
+                                <div class="mb-4">
+
+                                    <label class="form-label">
+
+                                        Lokasi Penyerahan
+
+                                    </label>
+
+                                    <input
+                                    type="text"
+                                    name="lokasi_penyerahan"
+                                    class="form-control custom-input"
+                                    required>
+
+                                </div>
+
+                                <!-- CATATAN -->
+                                <div class="mb-4">
+
+                                    <label class="form-label">
+
+                                        Catatan
+
+                                    </label>
+
+                                    <textarea
+                                    name="catatan_penyerahan"
+                                    class="form-control custom-input textarea-custom"></textarea>
+
+                                </div>
+
+                                <!-- KTM PENEMU -->
+                                <div class="mb-4">
+
+                                    <label class="form-label">
+
+                                        KTM Penemu
+
+                                    </label>
+
+                                    <input
+                                    type="file"
+                                    name="ktm_penemu"
+                                    class="form-control custom-input">
+
+                                </div>
+
+                                <!-- KTM PENERIMA -->
+                                <div class="mb-4">
+
+                                    <label class="form-label">
+
+                                        KTM Penerima
+
+                                    </label>
+
+                                    <input
+                                    type="file"
+                                    name="ktm_penerima"
+                                    class="form-control custom-input">
+
+                                </div>
+
+                                <!-- DOKUMENTASI -->
+                                <div class="mb-4">
+
+                                    <label class="form-label">
+
+                                        Dokumentasi Penyerahan
+
+                                    </label>
+
+                                    <input
+                                    type="file"
+                                    name="dokumentasi_penyerahan"
+                                    class="form-control custom-input">
+
+                                </div>
+
+                                <button
+                                type="submit"
+                                class="submit-serah-btn">
+
+                                    Simpan Serah Terima
+
+                                </button>
+
+                            </form>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            {% empty %}
+
+            <div class="empty-box">
+
+                Belum ada laporan approved.
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+        <!-- ===================================== -->
+        <!-- RIWAYAT SERAH TERIMA -->
+        <!-- ===================================== -->
+
+        <div class="dashboard-box">
+
+            <div class="box-header">
+
+                <h3>
+
+                    Riwayat Serah Terima
+
+                </h3>
+
+            </div>
+
+            {% for report in selesai_reports_list %}
+
+            <div class="report-admin-card">
+
+                <div class="row align-items-center gy-4">
+
+                    <!-- IMAGE -->
+                    <div class="col-lg-2 text-center">
+
+                        {% if report.foto_barang %}
+
+                        <img
+                        src="{{ report.foto_barang.url }}"
+                        class="report-image">
+
+                        {% else %}
+
+                        <div class="no-image">
+
+                            Tidak Ada Foto
+
+                        </div>
+
+                        {% endif %}
+
+                    </div>
+
+                    <!-- INFO -->
+                    <div class="col-lg-3">
+
+                        <h4 class="fw-bold">
+
+                            {{ report.nama_barang }}
+
+                        </h4>
+
+                        <div class="kategori-text">
+
+                            {{ report.kategori }}
+
+                        </div>
+
+                        <div class="lokasi-text">
+
+                            📍 {{ report.lokasi_penyerahan }}
+
+                        </div>
+
+                    </div>
+
+                    <!-- DATA -->
+                    <div class="col-lg-3">
+
+                        <div class="text-secondary-custom mb-2">
+
+                            Penemu:
+                            <b>
+                                {{ report.nama_penemu }}
+                            </b>
+
+                        </div>
+
+                        <div class="text-secondary-custom">
+
+                            Penerima:
+                            <b>
+                                {{ report.nama_penerima }}
+                            </b>
+
+                        </div>
+
+                    </div>
+
+                    <!-- STATUS -->
+                    <div class="col-lg-2">
+
+                        <span class="badge-status done-badge">
+
+                            Selesai
+
+                        </span>
+
+                    </div>
+
+                    <!-- DETAIL -->
+                    <div class="col-lg-2">
+
+                        <button
+                        class="history-btn"
+                        data-bs-toggle="modal"
+                        data-bs-target="#historyModal{{ report.id }}">
+
+                            Detail
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- ===================================== -->
+            <!-- HISTORY MODAL -->
+            <!-- ===================================== -->
+
+            <div
+            class="modal fade"
+            id="historyModal{{ report.id }}"
+            tabindex="-1">
+
+                <div class="modal-dialog modal-xl modal-dialog-centered">
+
+                    <div class="modal-content custom-modal">
+
+                        <div class="modal-header border-0">
+
+                            <h4 class="fw-bold">
+
+                                Detail Serah Terima
+
+                            </h4>
+
+                            <button
+                            type="button"
+                            class="btn-close btn-close-white"
+                            data-bs-dismiss="modal"></button>
+
+                        </div>
+
+                        <div class="modal-body">
+
+                            <div class="row">
+
+                                <!-- LEFT -->
+                                <div class="col-lg-6">
+
+                                    {% if report.foto_barang %}
+
+                                    <img
+                                    src="{{ report.foto_barang.url }}"
+                                    class="history-image mb-4">
+
+                                    {% endif %}
+
+                                    {% if report.dokumentasi_penyerahan %}
+
+                                    <img
+                                    src="{{ report.dokumentasi_penyerahan.url }}"
+                                    class="history-image">
+
+                                    {% endif %}
+
+                                </div>
+
+                                <!-- RIGHT -->
+                                <div class="col-lg-6">
+
+                                    <div class="detail-box">
+
+                                        <h5 class="detail-title">
+
+                                            Informasi Barang
+
+                                        </h5>
+
+                                        <div class="detail-item">
+
+                                            Nama Barang:
+                                            <b>
+                                                {{ report.nama_barang }}
+                                            </b>
+
+                                        </div>
+
+                                        <div class="detail-item">
+
+                                            Kategori:
+                                            <b>
+                                                {{ report.kategori }}
+                                            </b>
+
+                                        </div>
+
+                                        <div class="detail-item">
+
+                                            Lokasi:
+                                            <b>
+                                                {{ report.lokasi_penyerahan }}
+                                            </b>
+
+                                        </div>
+
+                                    </div>
+
+                                    <div class="detail-box">
+
+                                        <h5 class="detail-title">
+
+                                            Serah Terima
+
+                                        </h5>
+
+                                        <div class="detail-item">
+
+                                            Penemu:
+                                            <b>
+                                                {{ report.nama_penemu }}
+                                            </b>
+
+                                        </div>
+
+                                        <div class="detail-item">
+
+                                            Penerima:
+                                            <b>
+                                                {{ report.nama_penerima }}
+                                            </b>
+
+                                        </div>
+
+                                        <div class="detail-item">
+
+                                            Petugas:
+                                            <b>
+                                                {{ report.petugas_penyerahan }}
+                                            </b>
+
+                                        </div>
+
+                                    </div>
+
+                                    <div class="detail-box">
+
+                                        <h5 class="detail-title">
+
+                                            Catatan
+
+                                        </h5>
+
+                                        <div class="detail-note">
+
+                                            {{ report.catatan_penyerahan }}
+
+                                        </div>
+
+                                    </div>
+
+                                    <!-- KTM -->
+                                    <div class="row">
+
+                                        {% if report.ktm_penemu %}
+
+                                        <div class="col-6 mb-3">
+
+                                            <a
+                                            href="{{ report.ktm_penemu.url }}"
+                                            target="_blank"
+                                            class="document-btn">
+
+                                                KTM Penemu
+
+                                            </a>
+
+                                        </div>
+
+                                        {% endif %}
+
+                                        {% if report.ktm_penerima %}
+
+                                        <div class="col-6 mb-3">
+
+                                            <a
+                                            href="{{ report.ktm_penerima.url }}"
+                                            target="_blank"
+                                            class="document-btn">
+
+                                                KTM Penerima
+
+                                            </a>
+
+                                        </div>
+
+                                        {% endif %}
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            {% empty %}
+
+            <div class="empty-box">
+
+                Belum ada riwayat serah terima.
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+</section>
+
+<style>
+
+.admin-section{
+    min-height:100vh;
+}
+
+.dashboard-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    gap:20px;
+    margin-bottom:50px;
+    flex-wrap:wrap;
+}
+
+.mini-badge{
+    display:inline-block;
+    background:rgba(255,59,87,0.12);
+    color:#ff3b57;
+    padding:10px 18px;
+    border-radius:999px;
+    font-size:13px;
+    font-weight:700;
+    margin-bottom:20px;
+}
+
+.dashboard-title{
+    font-size:62px;
+    font-weight:800;
+}
+
+.dashboard-subtitle{
+    color:#777;
+    margin-top:15px;
+}
+
+.security-btn{
+    background:#ff3b57;
+    color:white;
+    padding:16px 24px;
+    border-radius:18px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-weight:700;
+    transition:0.3s;
+}
+
+.security-btn:hover{
+    background:#ff2146;
+    color:white;
+}
+
+.stats-card{
+    background:#111111;
+    border:1px solid #222;
+    border-radius:30px;
+    padding:30px;
+    display:flex;
+    align-items:center;
+    gap:20px;
+}
+
+.stats-icon{
+    width:70px;
+    height:70px;
+    border-radius:20px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:28px;
+}
+
+.warning-icon{
+    background:rgba(255,176,32,0.12);
+    color:#ffb020;
+}
+
+.success-icon{
+    background:rgba(31,143,80,0.12);
+    color:#1f8f50;
+}
+
+.done-icon{
+    background:rgba(0,140,255,0.12);
+    color:#0091ff;
+}
+
+.stats-label{
+    color:#777;
+    margin-bottom:10px;
+}
+
+.stats-number{
+    font-size:48px;
+    font-weight:800;
+}
+
+.done-text{
+    color:#0091ff;
+}
+
+.dashboard-box{
+    background:#111111;
+    border:1px solid #222;
+    border-radius:35px;
+    padding:35px;
+}
+
+.box-header{
+    margin-bottom:35px;
+}
+
+.report-admin-card{
+    background:#161616;
+    border:1px solid #222;
+    border-radius:28px;
+    padding:25px;
+    margin-bottom:25px;
+    transition:0.3s;
+}
+
+.report-admin-card:hover{
+    border-color:#ff3b57;
+}
+
+.report-image{
+    width:110px;
+    height:110px;
+    object-fit:cover;
+    border-radius:20px;
+}
+
+.no-image{
+    width:110px;
+    height:110px;
+    background:#1f1f1f;
+    border-radius:20px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:#777;
+    font-size:13px;
+    margin:auto;
+}
+
+.kategori-text{
+    color:#ff3b57;
+    margin-top:10px;
+    font-weight:600;
+}
+
+.lokasi-text{
+    color:#777;
+    margin-top:10px;
+}
+
+.badge-status{
+    padding:10px 18px;
+    border-radius:12px;
+    font-weight:700;
+}
+
+.warning-badge{
+    background:#ffb020;
+    color:black;
+}
+
+.success-badge{
+    background:#1f8f50;
+    color:white;
+}
+
+.done-badge{
+    background:#0091ff;
+    color:white;
+}
+
+.approve-btn,
+.reject-btn,
+.serah-btn,
+.delete-btn,
+.history-btn{
+    width:100%;
+    display:block;
+    text-align:center;
+    padding:14px;
+    border-radius:14px;
+    font-weight:700;
+    transition:0.3s;
+    border:none;
+    margin-bottom:12px;
+}
+
+.approve-btn{
+    background:#1f8f50;
+    color:white;
+}
+
+.reject-btn{
+    background:#ff3b57;
+    color:white;
+}
+
+.serah-btn{
+    background:#0091ff;
+    color:white;
+}
+
+.delete-btn{
+    background:#2a2a2a;
+    color:white;
+}
+
+.history-btn{
+    background:#0091ff;
+    color:white;
+}
+
+.custom-modal{
+    background:#111111;
+    border:1px solid #222;
+    border-radius:30px;
+    color:white;
+}
+
+.custom-input{
+    background:#1a1a1a;
+    border:1px solid #2a2a2a;
+    color:white;
+    border-radius:16px;
+    padding:16px;
+}
+
+.custom-input:focus{
+    background:#1a1a1a;
+    color:white;
+    border-color:#ff3b57;
+    box-shadow:none;
+}
+
+.textarea-custom{
+    height:120px;
+}
+
+.submit-serah-btn{
+    width:100%;
+    background:#ff3b57;
+    border:none;
+    padding:16px;
+    border-radius:16px;
+    color:white;
+    font-weight:700;
+}
+
+.empty-box{
+    background:#161616;
+    border-radius:24px;
+    padding:70px;
+    text-align:center;
+    color:#777;
+}
+
+.history-image{
+    width:100%;
+    border-radius:24px;
+    border:1px solid #222;
+}
+
+.detail-box{
+    background:#161616;
+    border:1px solid #222;
+    border-radius:24px;
+    padding:24px;
+    margin-bottom:20px;
+}
+
+.detail-title{
+    margin-bottom:20px;
+    font-weight:700;
+}
+
+.detail-item{
+    margin-bottom:12px;
+    color:#ccc;
+}
+
+.detail-note{
+    color:#aaa;
+    line-height:1.8;
+}
+
+.document-btn{
+    display:block;
+    background:#1f1f1f;
+    border:1px solid #333;
+    color:white;
+    text-align:center;
+    padding:16px;
+    border-radius:16px;
+    transition:0.3s;
+}
+
+.document-btn:hover{
+    border-color:#ff3b57;
+    color:white;
+}
+
+@media(max-width:768px){
+
+    .dashboard-title{
+        font-size:42px;
+    }
+
+    .stats-number{
+        font-size:36px;
+    }
+
+}
+
+</style>
+
+{% endblock %}

@@ -1,0 +1,25 @@
+# Virtual Environment
+venv/
+env/
+
+# Python
+__pycache__/
+*.pyc
+
+# Database lokal
+db.sqlite3
+
+# Environment Variable
+.env
+
+# Upload user
+media/
+
+# Collectstatic Railway
+staticfiles/
+
+# VS Code
+.vscode/
+
+# Log
+*.log

@@ -1,0 +1,655 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Tambah Security Shift
+{% endblock %}
+
+{% block content %}
+
+<!-- FONT -->
+<link
+href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
+rel="stylesheet">
+
+<!-- ICON -->
+<link
+rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+/>
+
+<section class="py-5 security-section">
+
+    <div class="container d-flex justify-content-center">
+
+        <div class="shift-wrapper">
+
+            <!-- GLOW -->
+            <div class="glow glow-1"></div>
+            <div class="glow glow-2"></div>
+
+            <!-- HEADER -->
+            <div class="header-area">
+
+                <div>
+
+                    <div class="mini-badge">
+
+                        SECURITY MANAGEMENT
+
+                    </div>
+
+                    <h1 class="main-title">
+
+                        Tambah Security Shift
+
+                    </h1>
+
+                    <p class="subtitle">
+
+                        Tambahkan jadwal security untuk satu
+                        atau banyak tanggal sekaligus
+                        untuk sistem WhatsApp otomatis FINDIT AI.
+
+                    </p>
+
+                </div>
+
+                <!-- BACK -->
+                <div>
+
+                    <a
+                    href="{% url 'security_shift_dashboard' %}"
+                    class="back-btn">
+
+                        <i class="fas fa-arrow-left"></i>
+
+                        <span>
+                            Kembali
+                        </span>
+
+                    </a>
+
+                </div>
+
+            </div>
+
+            <!-- FORM -->
+            <form method="POST">
+
+                {% csrf_token %}
+
+                <!-- NAMA -->
+                <div class="mb-4">
+
+                    <label class="form-label">
+
+                        Nama Security
+
+                    </label>
+
+                    <div class="input-wrapper">
+
+                        <i class="fas fa-user-shield input-icon"></i>
+
+                        <input
+                        type="text"
+                        name="nama_security"
+                        class="form-control custom-input"
+                        placeholder="Contoh: Pak Ardi"
+                        required>
+
+                    </div>
+
+                </div>
+
+                <!-- SHIFT -->
+                <div class="mb-4">
+
+                    <label class="form-label">
+
+                        Nama Shift
+
+                    </label>
+
+                    <div class="input-wrapper">
+
+                        <i class="fas fa-clock input-icon"></i>
+
+                        <select
+                        name="nama_shift"
+                        class="form-control custom-input"
+                        required>
+
+                            <option value="">
+
+                                Pilih Shift
+
+                            </option>
+
+                            <option value="pagi">
+
+                                🌅 Shift Pagi
+
+                            </option>
+
+                            <option value="sore">
+
+                                🌇 Shift Sore
+
+                            </option>
+
+                            <option value="malam">
+
+                                🌙 Shift Malam
+
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+                <!-- WHATSAPP -->
+                <div class="mb-4">
+
+                    <label class="form-label">
+
+                        Nomor WhatsApp
+
+                    </label>
+
+                    <div class="input-wrapper">
+
+                        <i class="fab fa-whatsapp input-icon"></i>
+
+                        <input
+                        type="text"
+                        name="nomor_whatsapp"
+                        class="form-control custom-input"
+                        placeholder="628xxxxxxxxxx"
+                        required>
+
+                    </div>
+
+                </div>
+
+                <!-- MULTI DATE -->
+                <div class="mb-4">
+
+                    <label class="form-label">
+
+                        Tanggal Jaga
+
+                    </label>
+
+                    <div class="input-wrapper textarea-wrapper">
+
+                        <i class="fas fa-calendar-days input-icon textarea-icon"></i>
+
+                        <textarea
+                        name="tanggal_jaga"
+                        class="form-control custom-input textarea-input"
+                        placeholder="2026-05-17,2026-05-18,2026-05-19"
+                        required></textarea>
+
+                    </div>
+
+                    <small class="helper-text">
+
+                        Bisa satu tanggal atau banyak tanggal sekaligus.
+                        Pisahkan dengan koma.
+
+                    </small>
+
+                </div>
+
+                <!-- TIME -->
+                <div class="row">
+
+                    <div class="col-md-6 mb-4">
+
+                        <label class="form-label">
+
+                            Jam Mulai
+
+                        </label>
+
+                        <div class="input-wrapper">
+
+                            <i class="fas fa-hourglass-start input-icon"></i>
+
+                            <input
+                            type="time"
+                            name="jam_mulai"
+                            class="form-control custom-input"
+                            required>
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-6 mb-4">
+
+                        <label class="form-label">
+
+                            Jam Selesai
+
+                        </label>
+
+                        <div class="input-wrapper">
+
+                            <i class="fas fa-hourglass-end input-icon"></i>
+
+                            <input
+                            type="time"
+                            name="jam_selesai"
+                            class="form-control custom-input"
+                            required>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <!-- STATUS -->
+                <div class="status-box mb-5">
+
+                    <div class="form-check custom-check-wrapper">
+
+                        <input
+                        type="checkbox"
+                        name="aktif"
+                        class="form-check-input custom-check"
+                        id="aktif"
+                        checked>
+
+                        <label
+                        class="form-check-label"
+                        for="aktif">
+
+                            Aktifkan Shift Security
+
+                        </label>
+
+                    </div>
+
+                    <small class="status-desc">
+
+                        Jika aktif, nomor WhatsApp security akan otomatis
+                        digunakan pada halaman detail laporan.
+
+                    </small>
+
+                </div>
+
+                <!-- BUTTON -->
+                <button
+                type="submit"
+                class="save-btn">
+
+                    <i class="fas fa-check-circle"></i>
+
+                    <span>
+
+                        Simpan Shift
+
+                    </span>
+
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</section>
+
+<style>
+
+body{
+    background:#0a0a0a;
+    font-family:'Plus Jakarta Sans',sans-serif;
+}
+
+/* SECTION */
+
+.security-section{
+    min-height:100vh;
+}
+
+/* CARD */
+
+.shift-wrapper{
+    width:100%;
+    max-width:920px;
+
+    background:#111111;
+
+    border:1px solid #222;
+
+    border-radius:38px;
+
+    padding:55px;
+
+    position:relative;
+
+    overflow:hidden;
+}
+
+/* GLOW */
+
+.glow{
+    position:absolute;
+    border-radius:999px;
+    filter:blur(120px);
+    opacity:0.07;
+}
+
+.glow-1{
+    width:320px;
+    height:320px;
+    background:#ff3b57;
+    top:-120px;
+    right:-100px;
+}
+
+.glow-2{
+    width:260px;
+    height:260px;
+    background:#ff3b57;
+    bottom:-120px;
+    left:-100px;
+}
+
+/* HEADER */
+
+.header-area{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    gap:20px;
+    margin-bottom:55px;
+    flex-wrap:wrap;
+    position:relative;
+    z-index:2;
+}
+
+.mini-badge{
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+
+    background:rgba(255,59,87,0.12);
+
+    color:#ff3b57;
+
+    padding:10px 18px;
+
+    border-radius:999px;
+
+    font-size:12px;
+
+    font-weight:700;
+
+    letter-spacing:1px;
+
+    margin-bottom:22px;
+}
+
+.main-title{
+    font-size:62px;
+    font-weight:800;
+    line-height:1.05;
+    margin-bottom:18px;
+    color:white;
+    letter-spacing:-2px;
+}
+
+.subtitle{
+    color:#777;
+    font-size:17px;
+    max-width:650px;
+    line-height:1.8;
+}
+
+/* BACK */
+
+.back-btn{
+    background:#1b1b1b;
+
+    border:1px solid #2b2b2b;
+
+    color:white;
+
+    text-decoration:none;
+
+    padding:15px 24px;
+
+    border-radius:18px;
+
+    font-weight:600;
+
+    transition:0.3s;
+
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.back-btn:hover{
+    background:#252525;
+    color:white;
+    transform:translateY(-3px);
+}
+
+/* LABEL */
+
+.form-label{
+    margin-bottom:14px;
+    font-weight:600;
+    color:white;
+    font-size:15px;
+}
+
+/* INPUT */
+
+.input-wrapper{
+    position:relative;
+}
+
+.input-icon{
+    position:absolute;
+
+    left:22px;
+    top:50%;
+
+    transform:translateY(-50%);
+
+    color:#666;
+
+    font-size:15px;
+
+    z-index:2;
+}
+
+.textarea-icon{
+    top:28px;
+    transform:none;
+}
+
+.custom-input{
+    background:#1a1a1a !important;
+
+    border:1px solid #2b2b2b !important;
+
+    color:white !important;
+
+    border-radius:20px !important;
+
+    padding-left:58px !important;
+
+    padding-right:20px !important;
+
+    height:68px;
+
+    transition:0.3s;
+}
+
+.custom-input:focus{
+    background:#1a1a1a !important;
+    color:white !important;
+    border:1px solid #ff3b57 !important;
+    box-shadow:none !important;
+}
+
+.custom-input::placeholder{
+    color:#666;
+}
+
+/* TEXTAREA */
+
+.textarea-input{
+    min-height:130px;
+    resize:none;
+    padding-top:22px !important;
+}
+
+/* HELPER */
+
+.helper-text{
+    display:block;
+    margin-top:12px;
+    color:#777;
+    line-height:1.7;
+}
+
+/* STATUS BOX */
+
+.status-box{
+    background:#161616;
+    border:1px solid #222;
+    border-radius:24px;
+    padding:26px;
+}
+
+.custom-check-wrapper{
+    display:flex;
+    align-items:center;
+}
+
+.custom-check{
+    width:22px;
+    height:22px;
+
+    background-color:#1a1a1a;
+    border:1px solid #444;
+}
+
+.custom-check:checked{
+    background-color:#ff3b57;
+    border-color:#ff3b57;
+}
+
+.form-check-label{
+    margin-left:14px;
+    font-weight:600;
+    color:white;
+}
+
+.status-desc{
+    display:block;
+    color:#777;
+    margin-top:14px;
+    line-height:1.7;
+}
+
+/* BUTTON */
+
+.save-btn{
+    width:100%;
+
+    background:#ff3b57;
+
+    border:none;
+
+    color:white;
+
+    height:72px;
+
+    border-radius:22px;
+
+    font-size:19px;
+
+    font-weight:700;
+
+    transition:0.3s;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:12px;
+
+    position:relative;
+    overflow:hidden;
+}
+
+.save-btn::before{
+    content:'';
+    position:absolute;
+    inset:0;
+    background:linear-gradient(
+        90deg,
+        transparent,
+        rgba(255,255,255,0.15),
+        transparent
+    );
+    transform:translateX(-100%);
+    transition:0.7s;
+}
+
+.save-btn:hover::before{
+    transform:translateX(100%);
+}
+
+.save-btn:hover{
+    background:#ff2146;
+    transform:translateY(-2px);
+}
+
+/* MOBILE */
+
+@media(max-width:768px){
+
+    .shift-wrapper{
+        padding:30px;
+        border-radius:28px;
+    }
+
+    .main-title{
+        font-size:42px;
+    }
+
+    .subtitle{
+        font-size:15px;
+    }
+
+    .header-area{
+        flex-direction:column;
+    }
+
+    .custom-input{
+        height:62px;
+    }
+
+    .textarea-input{
+        min-height:120px;
+    }
+
+}
+
+</style>
+
+{% endblock %}

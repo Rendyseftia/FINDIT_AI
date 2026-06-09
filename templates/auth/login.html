@@ -1,0 +1,150 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Login - FINDIT AI
+{% endblock %}
+
+{% block content %}
+
+<section style="
+min-height:90vh;
+display:flex;
+align-items:center;
+justify-content:center;
+">
+
+    <div class="container">
+
+        <div class="row justify-content-center">
+
+            <div class="col-lg-5">
+
+                <div class="card-dark p-5">
+
+                    <div class="text-center mb-4">
+
+                        <div class="logo mb-3">
+                            <span>FINDIT</span> AI
+                        </div>
+
+                        <p class="text-secondary-custom">
+                            Masuk untuk melanjutkan
+                        </p>
+
+                    </div>
+
+                    {% if messages %}
+
+                        {% for message in messages %}
+
+                            <div class="alert alert-danger">
+                                {{ message }}
+                            </div>
+
+                        {% endfor %}
+
+                    {% endif %}
+
+                    <form method="POST">
+
+                        {% csrf_token %}
+
+                        <div class="mb-4">
+
+                            <label class="mb-2">
+                                Username
+                            </label>
+
+                            <input
+                            type="text"
+                            name="username"
+                            class="form-control bg-dark text-white border-0 p-3"
+                            required>
+
+                        </div>
+
+                        <div class="mb-4">
+
+                            <label class="mb-2">
+                                Password
+                            </label>
+
+                            <input
+                            type="password"
+                            name="password"
+                            class="form-control bg-dark text-white border-0 p-3"
+                            required>
+
+                        </div>
+
+                        <button class="btn btn-main w-100 py-3">
+                            Masuk
+                        </button>
+
+                    </form>
+
+                    <!-- FORGOT PASSWORD -->
+                    <div class="text-center mt-4">
+
+                        <a
+                        href="{% url 'forgot_password' %}"
+                        class="text-secondary-custom forgot-link">
+
+                            Lupa Password?
+
+                        </a>
+
+                    </div>
+
+                    <!-- REGISTER -->
+                    <div class="text-center mt-3">
+
+                        <span class="text-secondary-custom">
+                            Belum punya akun?
+                        </span>
+
+                        <a
+                        href="{% url 'register' %}"
+                        class="register-link">
+
+                            Daftar
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<style>
+
+.forgot-link{
+    text-decoration:none;
+    transition:0.3s;
+}
+
+.forgot-link:hover{
+    color:#ff3b57 !important;
+}
+
+.register-link{
+    color:#ff3b57;
+    text-decoration:none;
+    font-weight:600;
+    transition:0.3s;
+}
+
+.register-link:hover{
+    color:#ff5c74;
+}
+
+</style>
+
+{% endblock %}

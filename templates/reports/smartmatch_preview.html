@@ -1,0 +1,252 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Smart Match
+{% endblock %}
+
+{% block content %}
+
+{% if best_match %}
+
+<section class="py-5">
+
+    <div class="container">
+
+        <div class="text-center mb-5">
+
+            <h1 class="fw-bold text-danger">
+
+                🧠 Smart Match Found
+
+            </h1>
+
+            <p class="text-secondary">
+
+                Kami menemukan kemungkinan barang yang cocok
+                dengan laporan Anda.
+
+            </p>
+
+        </div>
+
+        <div class="row justify-content-center">
+
+            <!-- LEFT -->
+            <div class="col-lg-4 mb-4">
+
+                <div class="match-card h-100">
+
+                    <div class="mini-label">
+
+                        LAPORAN ANDA
+
+                    </div>
+
+                    {% if report.foto_barang %}
+
+                    <img
+                    src="{{ report.foto_barang.url }}"
+                    class="match-image mb-4">
+
+                    {% endif %}
+
+                    <h2 class="match-title">
+
+                        {{ report.nama_barang }}
+
+                    </h2>
+
+                    <p class="match-category">
+
+                        {{ report.kategori }}
+
+                    </p>
+
+                    <div class="match-location">
+
+                        📍 {{ report.lokasi }}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- RIGHT -->
+            <div class="col-lg-8 mb-4">
+
+                <div class="match-card h-100">
+
+                    <div class="match-bar">
+
+                        {{ score }}% MATCH
+
+                    </div>
+
+                    <div class="row align-items-center">
+
+                        <div class="col-lg-4 mb-4 mb-lg-0">
+
+                            {% if best_match.foto_barang %}
+
+                            <img
+                            src="{{ best_match.foto_barang.url }}"
+                            class="match-image">
+
+                            {% endif %}
+
+                        </div>
+
+                        <div class="col-lg-8">
+
+                            <div class="mini-label text-danger">
+
+                                KEMUNGKINAN COCOK
+
+                            </div>
+
+                            <h2 class="match-title">
+
+                                {{ best_match.nama_barang }}
+
+                            </h2>
+
+                            <p class="match-category">
+
+                                {{ best_match.kategori }}
+
+                            </p>
+
+                            <div class="match-location mb-4">
+
+                                📍 {{ best_match.lokasi }}
+
+                            </div>
+
+                            <a
+                            href="{% url 'detail_report' best_match.id %}"
+                            class="detail-btn">
+
+                                Lihat Detail Barang
+
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% else %}
+
+<script>
+
+    alert(
+        'Laporan berhasil dikirim. Tunggu admin melakukan approval terlebih dahulu.'
+    );
+
+    window.location.href = "/";
+
+</script>
+
+{% endif %}
+
+<style>
+
+.match-card{
+    background:#111111;
+    border:1px solid #222;
+    border-radius:28px;
+    padding:35px;
+    transition:0.3s;
+}
+
+.match-card:hover{
+    border-color:#ff3b57;
+}
+
+.match-bar{
+    background:#1f8f50;
+    color:white;
+    text-align:center;
+    padding:12px;
+    border-radius:14px;
+    margin-bottom:30px;
+    font-weight:700;
+    font-size:15px;
+}
+
+.match-image{
+    width:100%;
+    height:240px;
+    object-fit:cover;
+    border-radius:20px;
+}
+
+.match-title{
+    font-size:42px;
+    font-weight:700;
+    margin-bottom:12px;
+}
+
+.match-category{
+    color:#ff3b57;
+    font-size:18px;
+    font-weight:600;
+    margin-bottom:18px;
+}
+
+.match-location{
+    color:#888;
+    font-size:15px;
+}
+
+.detail-btn{
+    display:inline-block;
+    width:100%;
+    background:#ff3b57;
+    color:white;
+    text-decoration:none;
+    text-align:center;
+    padding:16px;
+    border-radius:16px;
+    font-weight:700;
+    transition:0.3s;
+}
+
+.detail-btn:hover{
+    background:#ff2146;
+    color:white;
+}
+
+.mini-label{
+    color:#888;
+    font-size:13px;
+    font-weight:700;
+    margin-bottom:20px;
+    letter-spacing:1px;
+}
+
+@media(max-width:768px){
+
+    .match-title{
+        font-size:30px;
+    }
+
+    .match-image{
+        height:200px;
+    }
+
+}
+
+</style>
+
+{% endblock %}

@@ -1,0 +1,791 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Buat Laporan Barang
+{% endblock %}
+
+{% block content %}
+
+<section class="py-5">
+
+    <div class="container">
+
+        <div class="row justify-content-center">
+
+            <div class="col-lg-8">
+
+                <div class="report-card">
+
+                    <!-- TITLE -->
+                    <h2 class="title-report">
+
+                        Buat Laporan Barang
+
+                    </h2>
+
+                    <!-- FORM -->
+                    <form
+                    method="POST"
+                    enctype="multipart/form-data"
+                    id="reportForm">
+
+                        {% csrf_token %}
+
+                        <!-- ERROR -->
+                        <div
+                        id="aiError"
+                        class="custom-alert custom-alert-danger d-none">
+                        </div>
+
+                        <!-- LOADING -->
+                        <div
+                        id="aiLoading"
+                        class="custom-alert custom-alert-warning d-none">
+
+                            🤖 AI sedang menganalisa gambar...
+
+                        </div>
+
+                        <!-- SMART MATCH -->
+                        <div
+                        id="smartMatchBox"
+                        class="smartmatch-box d-none">
+
+                            <div class="smartmatch-header">
+
+                                🧠 Barang Mirip Ditemukan
+
+                            </div>
+
+                            <div class="smartmatch-content">
+
+                                <img
+                                id="smartMatchImage"
+                                src=""
+                                class="smartmatch-image">
+
+                                <div class="flex-grow-1">
+
+                                    <h4
+                                    id="smartMatchName">
+                                    </h4>
+
+                                    <p
+                                    id="smartMatchLocation"
+                                    class="text-secondary mb-2">
+                                    </p>
+
+                                    <div
+                                    id="smartMatchScore"
+                                    class="match-score">
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                            <div class="smartmatch-warning">
+
+                                Sistem mendeteksi barang yang sangat mirip
+                                dengan laporan Anda.
+
+                            </div>
+
+                            <div class="smartmatch-buttons">
+
+                                <button
+                                type="button"
+                                id="lihatDetailBtn"
+                                class="btn-smart-detail">
+
+                                    Lihat Detail Barang
+
+                                </button>
+
+                                <button
+                                type="button"
+                                id="tetapLanjutBtn"
+                                class="btn-smart-continue">
+
+                                    Tetap Lanjut Isi Form
+
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                        <!-- STEP -->
+                        <label class="step-label">
+
+                            1. UNGGAH FOTO & ANALISIS AI
+
+                        </label>
+
+                        <div class="upload-wrapper">
+
+                            <input
+                            type="file"
+                            name="foto_barang"
+                            id="foto_barang"
+                            class="upload-input"
+                            required>
+
+                            <button
+                            type="button"
+                            id="scanBtn"
+                            class="scan-btn">
+
+                                🤖 SCAN AI
+
+                            </button>
+
+                        </div>
+
+                        <small class="hint-text">
+
+                            Gunakan Scan AI untuk mengisi otomatis form.
+
+                        </small>
+
+                        <!-- STATUS -->
+                        <div class="row mt-4">
+
+                            <div class="col-lg-6 mb-4">
+
+                                <label class="input-label">
+
+                                    STATUS LAPORAN
+
+                                </label>
+
+                                <select
+                                name="status"
+                                class="custom-input"
+                                required>
+
+                                    {% if report_type == 'hilang' %}
+
+                                    <option value="hilang" selected>
+
+                                        Saya Kehilangan Barang
+
+                                    </option>
+
+                                    {% else %}
+
+                                    <option value="temuan" selected>
+
+                                        Saya Menemukan Barang
+
+                                    </option>
+
+                                    {% endif %}
+
+                                </select>
+
+                            </div>
+
+                            <div class="col-lg-6 mb-4">
+
+                                <label class="input-label">
+
+                                    KATEGORI
+
+                                </label>
+
+                                <select
+                                name="kategori"
+                                id="kategori"
+                                class="custom-input"
+                                required>
+
+                                    <option value="Elektronik">Elektronik</option>
+                                    <option value="Handphone">Handphone</option>
+                                    <option value="Laptop">Laptop</option>
+                                    <option value="Tas">Tas</option>
+                                    <option value="Dompet">Dompet</option>
+                                    <option value="Kunci">Kunci</option>
+                                    <option value="Dokumen">Dokumen</option>
+                                    <option value="Aksesoris">Aksesoris</option>
+                                    <option value="Botol Minum">Botol Minum</option>
+                                    <option value="Helm">Helm</option>
+                                    <option value="Lainnya">Lainnya</option>
+
+                                </select>
+
+                            </div>
+
+                        </div>
+
+                        <!-- NAMA -->
+                        <div class="mb-4">
+
+                            <label class="input-label">
+
+                                NAMA BARANG
+
+                            </label>
+
+                            <input
+                            type="text"
+                            name="nama_barang"
+                            id="nama_barang"
+                            class="custom-input"
+                            required>
+
+                        </div>
+
+                        <!-- TANGGAL -->
+                        <div class="mb-4">
+
+                            <label class="input-label">
+
+                                TANGGAL KEJADIAN
+
+                            </label>
+
+                            <input
+                            type="date"
+                            name="tanggal_kejadian"
+                            class="custom-input"
+                            required>
+
+                        </div>
+
+                        <!-- MAP -->
+                        <div class="mb-3">
+
+                            <label class="input-label">
+
+                                LOKASI (KLIK PADA PETA)
+
+                            </label>
+
+                            <div id="map"></div>
+
+                        </div>
+
+                        <!-- LAT LNG -->
+                        <div class="row">
+
+                            <div class="col-lg-6 mb-4">
+
+                                <input
+                                type="text"
+                                name="latitude"
+                                id="latitude"
+                                class="custom-input"
+                                placeholder="Latitude">
+
+                            </div>
+
+                            <div class="col-lg-6 mb-4">
+
+                                <input
+                                type="text"
+                                name="longitude"
+                                id="longitude"
+                                class="custom-input"
+                                placeholder="Longitude">
+
+                            </div>
+
+                        </div>
+
+                        <!-- LOKASI -->
+                        <div class="mb-4">
+
+                            <label class="input-label">
+
+                                ALAMAT DETAIL / PATOKAN
+
+                            </label>
+
+                            <input
+                            type="text"
+                            name="lokasi"
+                            class="custom-input"
+                            required>
+
+                        </div>
+
+                        <!-- WARNA -->
+                        <div class="mb-4">
+
+                            <label class="input-label">
+
+                                WARNA
+
+                            </label>
+
+                            <input
+                            type="text"
+                            name="warna"
+                            id="warna"
+                            class="custom-input">
+
+                        </div>
+
+                        <!-- MEREK -->
+                        <div class="mb-4">
+
+                            <label class="input-label">
+
+                                MEREK
+
+                            </label>
+
+                            <input
+                            type="text"
+                            name="merek"
+                            id="merek"
+                            class="custom-input">
+
+                        </div>
+
+                        <!-- DESKRIPSI -->
+                        <div class="mb-4">
+
+                            <label class="input-label">
+
+                                DESKRIPSI
+
+                            </label>
+
+                            <textarea
+                            name="deskripsi"
+                            id="deskripsi"
+                            rows="5"
+                            class="custom-input textarea-custom"></textarea>
+
+                        </div>
+
+                        <!-- BUTTON -->
+                        <button
+                        type="submit"
+                        class="publish-btn">
+
+                            ✈ PUBLIKASIKAN LAPORAN
+
+                        </button>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<link
+rel="stylesheet"
+href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+/>
+
+<script
+src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
+</script>
+
+<style>
+
+.report-card{
+    background:#111111;
+    border:1px solid #222;
+    border-radius:24px;
+    padding:35px;
+}
+
+.title-report{
+    font-size:42px;
+    font-weight:700;
+    margin-bottom:30px;
+}
+
+.step-label{
+    color:#888;
+    font-size:13px;
+    font-weight:700;
+    margin-bottom:12px;
+    display:block;
+}
+
+.upload-wrapper{
+    display:flex;
+    overflow:hidden;
+    border-radius:14px;
+    border:1px solid #2a2a2a;
+}
+
+.upload-input{
+    width:100%;
+    background:#1b1b1b;
+    color:white;
+    border:none;
+    padding:14px;
+}
+
+.scan-btn{
+    width:220px;
+    border:none;
+    background:#ff3b57;
+    color:white;
+    font-weight:700;
+}
+
+.custom-input{
+    width:100%;
+    background:#1b1b1b;
+    border:1px solid #2a2a2a;
+    border-radius:12px;
+    color:white;
+    padding:15px;
+}
+
+.publish-btn{
+    width:100%;
+    border:none;
+    background:#ff3b57;
+    color:white;
+    padding:18px;
+    border-radius:14px;
+    font-weight:700;
+}
+
+#map{
+    height:300px;
+    border-radius:16px;
+}
+
+.d-none{
+    display:none;
+}
+
+.custom-alert{
+    padding:16px;
+    border-radius:12px;
+    margin-bottom:20px;
+}
+
+.custom-alert-danger{
+    background:#441111;
+    color:#ffb3bd;
+}
+
+.custom-alert-warning{
+    background:#3d3100;
+    color:#ffe38b;
+}
+
+.smartmatch-box{
+    background:#141414;
+    border:1px solid #ff3b57;
+    border-radius:18px;
+    padding:20px;
+    margin-bottom:25px;
+}
+
+.smartmatch-content{
+    display:flex;
+    gap:20px;
+    align-items:center;
+}
+
+.smartmatch-image{
+    width:120px;
+    height:120px;
+    border-radius:14px;
+    object-fit:cover;
+}
+
+.smartmatch-buttons{
+    display:flex;
+    gap:15px;
+    margin-top:20px;
+}
+
+.btn-smart-detail,
+.btn-smart-continue{
+    flex:1;
+    border:none;
+    padding:14px;
+    border-radius:12px;
+    color:white;
+    font-weight:700;
+}
+
+.btn-smart-detail{
+    background:#ff3b57;
+}
+
+.btn-smart-continue{
+    background:#1f8f50;
+}
+
+</style>
+
+<script>
+
+document.addEventListener(
+    'DOMContentLoaded',
+    function(){
+
+        //
+        // MAP
+        //
+
+        if(
+            typeof L !== 'undefined' &&
+            document.getElementById('map')
+        ){
+
+            const map = L.map('map').setView(
+                [-0.5022, 117.1537],
+                13
+            );
+
+            L.tileLayer(
+                'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+                {
+                    attribution:'&copy; OpenStreetMap'
+                }
+            ).addTo(map);
+
+            let marker;
+
+            map.on('click', function(e){
+
+                const lat = e.latlng.lat;
+                const lng = e.latlng.lng;
+
+                document.getElementById(
+                    'latitude'
+                ).value = lat;
+
+                document.getElementById(
+                    'longitude'
+                ).value = lng;
+
+                if(marker){
+
+                    map.removeLayer(marker);
+
+                }
+
+                marker = L.marker(
+                    [lat, lng]
+                ).addTo(map);
+
+            });
+
+        }
+
+        //
+        // AI SCAN
+        //
+
+        const scanBtn =
+            document.getElementById(
+                'scanBtn'
+            );
+
+        if(scanBtn){
+
+            scanBtn.addEventListener(
+                'click',
+                async function(){
+
+                    const fileInput =
+                        document.getElementById(
+                            'foto_barang'
+                        );
+
+                    const aiError =
+                        document.getElementById(
+                            'aiError'
+                        );
+
+                    const aiLoading =
+                        document.getElementById(
+                            'aiLoading'
+                        );
+
+                    const smartMatchBox =
+                        document.getElementById(
+                            'smartMatchBox'
+                        );
+
+                    if(aiError){
+
+                        aiError.classList.add(
+                            'd-none'
+                        );
+
+                    }
+
+                    if(smartMatchBox){
+
+                        smartMatchBox.classList.add(
+                            'd-none'
+                        );
+
+                    }
+
+                    if(
+                        !fileInput ||
+                        !fileInput.files ||
+                        !fileInput.files[0]
+                    ){
+
+                        if(aiError){
+
+                            aiError.innerHTML =
+                                'Upload foto terlebih dahulu';
+
+                            aiError.classList.remove(
+                                'd-none'
+                            );
+
+                        }
+
+                        return;
+
+                    }
+
+                    if(aiLoading){
+
+                        aiLoading.classList.remove(
+                            'd-none'
+                        );
+
+                    }
+
+                    scanBtn.disabled = true;
+
+                    scanBtn.innerHTML =
+                        '🤖 SCANNING AI...';
+
+                    const formData =
+                        new FormData();
+
+                    formData.append(
+                        'foto_barang',
+                        fileInput.files[0]
+                    );
+
+                    try{
+
+                        const response =
+                            await fetch(
+                                '/ai/analyze/',
+                                {
+                                    method:'POST',
+
+                                    headers:{
+                                        'X-CSRFToken':
+                                        '{{ csrf_token }}'
+                                    },
+
+                                    body:formData
+                                }
+                            );
+
+                        const data =
+                            await response.json();
+
+                        if(aiLoading){
+
+                            aiLoading.classList.add(
+                                'd-none'
+                            );
+
+                        }
+
+                        scanBtn.disabled = false;
+
+                        scanBtn.innerHTML =
+                            '🤖 SCAN AI';
+
+                        if(data.error){
+
+                            aiError.innerHTML =
+                                data.error;
+
+                            aiError.classList.remove(
+                                'd-none'
+                            );
+
+                            return;
+
+                        }
+
+                        document.getElementById(
+                            'nama_barang'
+                        ).value =
+                            data.nama_barang || '';
+
+                        document.getElementById(
+                            'kategori'
+                        ).value =
+                            data.kategori || 'Lainnya';
+
+                        document.getElementById(
+                            'warna'
+                        ).value =
+                            data.warna || '';
+
+                        document.getElementById(
+                            'merek'
+                        ).value =
+                            data.merek || '';
+
+                        document.getElementById(
+                            'deskripsi'
+                        ).value =
+                            data.deskripsi || '';
+
+                    }catch(error){
+
+                        console.log(error);
+
+                        if(aiLoading){
+
+                            aiLoading.classList.add(
+                                'd-none'
+                            );
+
+                        }
+
+                        scanBtn.disabled = false;
+
+                        scanBtn.innerHTML =
+                            '🤖 SCAN AI';
+
+                        if(aiError){
+
+                            aiError.innerHTML =
+                                'Terjadi kesalahan sistem AI';
+
+                            aiError.classList.remove(
+                                'd-none'
+                            );
+
+                        }
+
+                    }
+
+                }
+            );
+
+        }
+
+    }
+);
+
+</script>
+
+{% endblock %}

@@ -1,0 +1,384 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Security Shift Dashboard
+{% endblock %}
+
+{% block content %}
+
+<section class="py-5">
+
+    <div class="container">
+
+        <!-- HEADER -->
+        <div class="dashboard-header">
+
+            <div>
+
+                <h1 class="dashboard-title">
+
+                    Security Shift
+
+                </h1>
+
+                <p class="dashboard-subtitle">
+
+                    Kelola nomor WhatsApp security kampus berdasarkan jadwal mingguan aktif.
+
+                </p>
+
+            </div>
+
+            <!-- ACTION BUTTON -->
+            <div class="header-action-group">
+
+                <!-- BACK -->
+                <a
+                href="{% url 'admin_dashboard' %}"
+                class="back-btn">
+
+                    <i class="bi bi-arrow-left"></i>
+
+                    Dashboard Admin
+
+                </a>
+
+                <!-- ADD -->
+                <a
+                href="{% url 'add_security_shift' %}"
+                class="add-btn">
+
+                    + Tambah Shift
+
+                </a>
+
+            </div>
+
+        </div>
+
+        <!-- SHIFT LIST -->
+        <div class="row">
+
+            {% for shift in shifts %}
+
+            <div class="col-lg-4 mb-4">
+
+                <div class="shift-card">
+
+                    <!-- STATUS -->
+                    {% if shift.aktif %}
+
+                    <div class="active-dot">
+
+                        ● AKTIF
+
+                    </div>
+
+                    {% else %}
+
+                    <div class="inactive-dot">
+
+                        ● NONAKTIF
+
+                    </div>
+
+                    {% endif %}
+
+                    <!-- SECURITY NAME -->
+                    <div class="security-name">
+
+                        {{ shift.nama_security }}
+
+                    </div>
+
+                    <!-- SHIFT -->
+                    <div class="shift-name">
+
+                        Shift {{ shift.nama_shift|title }}
+
+                    </div>
+
+                    <!-- WHATSAPP -->
+                    <div class="shift-number">
+
+                        {{ shift.nomor_whatsapp }}
+
+                    </div>
+
+                    <!-- TIME -->
+                    <div class="shift-time">
+
+                        {{ shift.jam_mulai }}
+                        -
+                        {{ shift.jam_selesai }}
+
+                    </div>
+
+                    <!-- DATE -->
+                    <div class="shift-date">
+
+                        📅 Tanggal Aktif
+
+                        {% for tanggal in shift.tanggal_list %}
+
+                            <div>
+                                • {{ tanggal|date:"d F Y" }}
+                            </div>
+
+                        {% endfor %}
+
+                    </div>
+
+                    <!-- BUTTON -->
+                    <div class="button-group">
+
+                        <a
+                        href="{% url 'edit_security_shift' shift.id %}"
+                        class="edit-btn">
+
+                            Edit
+
+                        </a>
+
+                        <a
+                        href="{% url 'delete_security_shift' shift.id %}"
+                        class="delete-btn">
+
+                            Hapus
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            {% empty %}
+
+            <div class="col-12">
+
+                <div class="empty-box">
+
+                    Belum ada shift security.
+
+                </div>
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+</section>
+
+<style>
+
+.dashboard-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:50px;
+    gap:20px;
+    flex-wrap:wrap;
+}
+
+.dashboard-title{
+    font-size:52px;
+    font-weight:700;
+}
+
+.dashboard-subtitle{
+    color:#777;
+    margin-top:10px;
+    font-size:16px;
+}
+
+/* ACTION GROUP */
+.header-action-group{
+    display:flex;
+    gap:15px;
+    flex-wrap:wrap;
+}
+
+/* BACK BUTTON */
+.back-btn{
+    background:#1a1a1a;
+    border:1px solid #2a2a2a;
+    color:white;
+    text-decoration:none;
+    padding:16px 24px;
+    border-radius:16px;
+    font-weight:700;
+    transition:0.3s;
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.back-btn:hover{
+    border-color:#ff3b57;
+    color:white;
+    transform:translateY(-2px);
+}
+
+/* ADD BUTTON */
+.add-btn{
+    background:#ff3b57;
+    color:white;
+    text-decoration:none;
+    padding:16px 24px;
+    border-radius:16px;
+    font-weight:700;
+    transition:0.3s;
+    display:inline-block;
+}
+
+.add-btn:hover{
+    background:#ff2146;
+    color:white;
+}
+
+.shift-card{
+    background:#111111;
+    border:1px solid #222;
+    border-radius:28px;
+    padding:30px;
+    transition:0.3s;
+    height:100%;
+    position:relative;
+    overflow:hidden;
+}
+
+.shift-card:hover{
+    transform:translateY(-5px);
+    border:1px solid #ff3b57;
+}
+
+.active-dot{
+    color:#1f8f50;
+    font-size:13px;
+    font-weight:700;
+    margin-bottom:25px;
+}
+
+.inactive-dot{
+    color:#777;
+    font-size:13px;
+    font-weight:700;
+    margin-bottom:25px;
+}
+
+.security-name{
+    font-size:34px;
+    font-weight:700;
+    margin-bottom:10px;
+}
+
+.shift-name{
+    font-size:18px;
+    color:#ff3b57;
+    margin-bottom:25px;
+    font-weight:600;
+}
+
+.shift-number{
+    font-size:24px;
+    font-weight:600;
+    margin-bottom:20px;
+    word-break:break-word;
+}
+
+.shift-time{
+    color:#777;
+    margin-bottom:10px;
+    font-size:15px;
+}
+
+.shift-date{
+    color:#1f8f50;
+    margin-bottom:30px;
+    font-size:15px;
+    font-weight:600;
+}
+
+.button-group{
+    display:flex;
+    gap:15px;
+}
+
+.edit-btn{
+    flex:1;
+    background:#ff3b57;
+    color:white;
+    text-decoration:none;
+    text-align:center;
+    padding:14px;
+    border-radius:14px;
+    font-weight:700;
+    transition:0.3s;
+}
+
+.edit-btn:hover{
+    background:#ff2146;
+    color:white;
+}
+
+.delete-btn{
+    flex:1;
+    background:#222;
+    color:white;
+    text-decoration:none;
+    text-align:center;
+    padding:14px;
+    border-radius:14px;
+    font-weight:700;
+    transition:0.3s;
+}
+
+.delete-btn:hover{
+    background:#444;
+    color:white;
+}
+
+.empty-box{
+    background:#111111;
+    border:1px solid #222;
+    border-radius:24px;
+    padding:70px;
+    text-align:center;
+    color:#777;
+    font-size:18px;
+}
+
+@media(max-width:768px){
+
+    .dashboard-title{
+        font-size:38px;
+    }
+
+    .security-name{
+        font-size:28px;
+    }
+
+    .button-group{
+        flex-direction:column;
+    }
+
+    .header-action-group{
+        width:100%;
+    }
+
+    .back-btn,
+    .add-btn{
+        width:100%;
+        justify-content:center;
+    }
+
+}
+
+</style>
+
+{% endblock %}
