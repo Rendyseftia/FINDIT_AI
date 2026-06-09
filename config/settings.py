@@ -6,7 +6,12 @@ SECRET_KEY = 'django-insecure-findit-ai'
 
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    '127.0.0.1',
+    'localhost',
+    '.railway.app',
+    'finditai-production.up.railway.app',
+]
 
 INSTALLED_APPS = [
     'django.contrib.admin',
