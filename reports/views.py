@@ -107,8 +107,6 @@ def home(request):
 
     reports = Report.objects.filter(
         status_verifikasi='approved'
-    ).exclude(
-        status='selesai'
     ).order_by('-id')
 
     context = {

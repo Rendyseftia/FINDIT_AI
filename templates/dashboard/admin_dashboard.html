@@ -268,6 +268,14 @@ Dashboard Admin
                             Tolak
 
                         </a>
+                        <a
+                        href="{% url 'delete_report' report.id %}"
+                        class="delete-btn"
+                        onclick="return confirm('Yakin ingin menghapus laporan ini?')">
+
+                            Hapus
+
+                        </a>
 
                     </div>
 
@@ -695,7 +703,14 @@ Dashboard Admin
                             Detail
 
                         </button>
+                        <a
+                        href="{% url 'delete_report' report.id %}"
+                        class="delete-btn"
+                        onclick="return confirm('Yakin ingin menghapus riwayat ini?')">
 
+                            Hapus
+
+                        </a>
                     </div>
 
                 </div>
@@ -1125,7 +1140,7 @@ Dashboard Admin
 }
 
 .delete-btn{
-    background:#2a2a2a;
+    background:#dc3545;
     color:white;
 }
 
