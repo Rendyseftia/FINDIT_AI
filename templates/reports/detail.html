@@ -41,14 +41,27 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
             <!-- IMAGE -->
             <div class="col-lg-7">
 
-                <div class="detail-image-card">
+            <div class="detail-image-card">
+            
+            {% if report.foto_barang %}
 
-                    <img
-                    src="{{ report.foto_barang.url }}"
-                    class="detail-image">
+            <img
+            src="{{ report.foto_barang.url }}"
+            class="detail-image">
 
-                </div>
+            {% else %}
 
+            <div class="detail-image-placeholder">
+
+                <i class="fas fa-image"></i>
+
+                <p>Tidak ada foto barang</p>
+
+            </div>
+
+            {% endif %}
+
+            </div>
             </div>
 
             <!-- DETAIL -->
@@ -59,19 +72,21 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
                     <!-- STATUS -->
                     {% if report.status == 'hilang' %}
 
-                        <div class="status-badge danger-badge">
+                    <div class="status-badge danger-badge">
+                        Barang Hilang
+                    </div>
 
-                            Barang Hilang
+                    {% elif report.status == 'temuan' %}
 
-                        </div>
+                    <div class="status-badge success-badge">
+                        Barang Ditemukan
+                    </div>
 
-                    {% else %}
+                    {% elif report.status == 'selesai' %}
 
-                        <div class="status-badge success-badge">
-
-                            Barang Ditemukan
-
-                        </div>
+                    <div class="status-badge success-badge">
+                        Barang Telah Diserahterimakan
+                    </div>
 
                     {% endif %}
 
@@ -136,26 +151,77 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
                         </p>
 
                     </div>
-
-                    <!-- CIRI -->
                     <div class="content-section">
 
                         <h5 class="content-title">
-
-                            Ciri Khas
-
+                            Detail Barang
                         </h5>
 
                         <p class="content-text">
-
-                            {{ report.ciri_khas }}
-
+                            Merek: {{ report.merek|default:"-" }}<br>
+                            Warna: {{ report.warna|default:"-" }}
                         </p>
 
                     </div>
-
                     <!-- SECURITY -->
                     <div class="security-box">
+
+                    {% if report.status == 'selesai' %}
+
+                        <small class="security-label">
+
+                            Informasi Serah Terima
+
+                        </small>
+
+                        <h4 class="security-name">
+
+                            Barang Telah Diserahterimakan
+
+                        </h4>
+                            {% if report.nama_penerima %}
+                            <p class="security-time">
+                                Penerima:
+                                {{ report.nama_penerima }}
+                            </p>
+                            {% endif %}
+
+                            {% if report.lokasi_penyerahan %}
+                            <p class="security-time">
+                                Lokasi:
+                                {{ report.lokasi_penyerahan }}
+                            </p>
+                            {% endif %}
+
+                        {% if report.petugas_serah_terima %}
+
+                            <p class="security-shift">
+
+                                Diserahterimakan oleh:
+                                {{ report.petugas_serah_terima.nama_security }}
+
+                            </p>
+
+                            <p class="security-phone">
+
+                                {{ report.petugas_serah_terima.nomor_whatsapp }}
+
+                            </p>
+
+                        {% endif %}
+
+                        {% if report.tanggal_serah_terima %}
+
+                            <p class="security-time">
+
+                                Tanggal Serah Terima:
+                                {{ report.tanggal_serah_terima|date:"d F Y H:i" }}
+
+                            </p>
+
+                        {% endif %}
+
+                    {% else %}
 
                         <small class="security-label">
 
@@ -201,9 +267,14 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
 
                         {% endif %}
 
-                    </div>
+                    {% endif %}
+
+                </div>
 
                     <!-- BUTTON -->
+                    {% if report.status != 'selesai' %}
+
+
                     <a
                     href="{{ whatsapp_url }}"
                     target="_blank"
@@ -215,6 +286,8 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
 
                     </a>
 
+                    {% endif %}
+
                 </div>
 
             </div>
@@ -222,7 +295,11 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
         </div>
 
         <!-- SMART MATCH -->
-        <div class="smart-box">
+            {% if report.status != 'selesai' %}
+
+
+            <!-- SMART MATCH -->
+            <div class="smart-box">
 
             <h2 class="smart-title">
 
@@ -231,17 +308,28 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
             </h2>
 
             <div class="row g-4">
-
                 {% for item in smart_matches %}
 
                 <div class="col-lg-4">
 
                     <div class="smart-card">
+                    
+                    {% if item.foto_barang %}
 
-                        <img
-                        src="{{ item.foto_barang.url }}"
-                        class="smart-image">
+                    <img
+                    src="{{ item.foto_barang.url }}"
+                    class="smart-image">
 
+                    {% else %}
+
+                    <div class="smart-image-placeholder">
+
+                        <i class="fas fa-image"></i>
+
+                        <p>Tidak ada foto</p>
+                    </div>
+
+                    {% endif %}
                         <div class="smart-body">
 
                             <h4 class="smart-item-title">
@@ -264,7 +352,7 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
 
                                 Lihat Detail
 
-                            </a>
+                            </a>    
 
                         </div>
 
@@ -286,11 +374,14 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
 
                 {% endfor %}
 
+                </div>
+
             </div>
 
-        </div>
+        {% endif %}
 
     </div>
+
 
 </section>
 
@@ -356,6 +447,7 @@ body{
 
 .detail-image{
     width:100%;
+    min-height:400px;
     border-radius:22px;
     object-fit:cover;
 }
@@ -646,7 +738,38 @@ body{
     text-align:center;
     color:#777;
 }
+.detail-image-placeholder{
+    width:100%;
+    min-height:400px;
 
+
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+
+    border-radius:22px;
+
+    background:#181818;
+
+    color:#666;
+}
+
+.detail-image-placeholder i{
+    font-size:60px;
+    margin-bottom:15px;
+}
+.smart-image-placeholder{
+    height:240px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+
+    background:#181818;
+    color:#666;
+}
 /* MOBILE */
 
 @media(max-width:768px){
