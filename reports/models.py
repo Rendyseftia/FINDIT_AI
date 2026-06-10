@@ -184,6 +184,21 @@ class Report(models.Model):
     )
 
     #
+    # STATUS PENGEMBALIAN
+    #
+
+    tanggal_serah_terima = models.DateTimeField(
+        null=True,
+        blank=True
+    )
+
+    petugas_serah_terima = models.ForeignKey(
+        'SecurityShift',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True
+    )
+    #
     # TIMESTAMP
     #
 

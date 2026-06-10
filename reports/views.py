@@ -1,3 +1,4 @@
+from django.utils import timezone
 from datetime import (
     datetime,
     date
@@ -105,9 +106,9 @@ def get_active_security():
 def home(request):
 
     reports = Report.objects.filter(
-
         status_verifikasi='approved'
-
+    ).exclude(
+        status='selesai'
     ).order_by('-id')
 
     context = {
@@ -147,6 +148,10 @@ def detail_report(request, report_id):
     #
 
     active_shift = get_active_security()
+
+    if report.status == "selesai" and report.petugas_serah_terima:
+
+        active_shift = report.petugas_serah_terima
 
     #
     # DEFAULT NUMBER
@@ -199,8 +204,11 @@ def detail_report(request, report_id):
         kategori=report.kategori,
 
         status_verifikasi='approved'
-
     ).exclude(
+        status='selesai'
+    ).exclude(
+    
+        
 
         id=report.id
 
@@ -357,12 +365,12 @@ def smart_match_check(request):
             'match': False
 
         })
-
     reports = Report.objects.filter(
-
         status_verifikasi='approved'
-
+    ).exclude(
+        status='selesai'
     )
+
 
     best_match = None
 
@@ -462,13 +470,11 @@ def smartmatch_preview(request, report_id):
     )
 
     reports = Report.objects.filter(
-
         status_verifikasi='approved'
-
     ).exclude(
-
+        status='selesai'
+    ).exclude(
         id=report.id
-
     )
 
     best_match = None
@@ -738,6 +744,14 @@ def serah_terima_barang(request, report_id):
             )
 
         report.status = 'selesai'
+
+        report.tanggal_serah_terima = timezone.now()
+
+        active_shift = get_active_security()
+
+        if active_shift:
+
+            report.petugas_serah_terima = active_shift
 
         report.save()
 
